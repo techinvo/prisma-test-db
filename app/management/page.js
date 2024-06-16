@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import TableComponent from '../components/TableComponent';
 
-const Home = () => {
+const Management = () => {
     const [tables, setTables] = useState([]);
     const [selectedTable, setSelectedTable] = useState('');
     const [tableData, setTableData] = useState({ data: [] });
@@ -133,4 +133,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Management;
