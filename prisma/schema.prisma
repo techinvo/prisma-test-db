@@ -65,8 +65,10 @@ enum Gender {
 }
 
 enum Status {
-  ACTIVE
-  INACTIVE
+  Healthy
+  RIP
+  Sick
+  Watchout
 }
 
 model ArrivalData {

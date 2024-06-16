@@ -45,9 +45,10 @@ export default function NavBar() {
             <li>
               <Link href="/management" className={linkClasses('/management')}>Management</Link>
             </li>
-            {/* <li>
-              <Link href="/services" className={linkClasses('/services')}>Services</Link>
+            <li>
+              <Link href="/page/formpet" className={linkClasses('/page/formpet')}>formpet</Link>
             </li>
+            {/* 
             <li>
               <Link href="/pricing" className={linkClasses('/pricing')}>Pricing</Link>
             </li>
