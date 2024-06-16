@@ -1,0 +1,178 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Pet {
+  id                    Int            @id @default(autoincrement())
+  number                Int
+  name                  String
+  petType               PetType
+  morph                 Morph          @relation(fields: [morphId], references: [id])
+  morphId               Int
+  gender                Gender
+  dateOfBirth           DateTime
+  age                   Int            @default(0) // Age can be calculated dynamically
+  status                Status
+  dateOfInactiveness    DateTime?
+  cause                 String?
+  note                  String?
+  arrivalData           ArrivalData    @relation(fields: [arrivalDataId], references: [id])
+  arrivalDataId         Int
+  weightRecords         WeightRecord[]
+  habits                String?
+  favoriteFood          String?
+  personalityScale      PersonalityScale @relation(fields: [personalityScaleId], references: [id])
+  personalityScaleId    Int
+  habitats              Habitat[]
+  locationTags          LocationTag[]
+  feedings              Feeding[]
+  cleanings             Cleaning[]
+  sheds                 Shed[]
+  illnesses             Illness[]
+  pairings              Pairing[]
+  attachedFiles         AttachedFile[]
+}
+
+enum PetType {
+  SNAKE
+  LPG
+  TREE_FROGS
+}
+
+model Morph {
+  id            Int    @id @default(autoincrement())
+  color         String
+  dominantGene  String
+  subGene       String
+  pets          Pet[]
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  UNKNOWN
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+model ArrivalData {
+  id          Int       @id @default(autoincrement())
+  petPrice    Float
+  shipping    Float
+  date        DateTime
+  from        String
+  weight      Float
+  pets        Pet[]
+}
+
+model WeightRecord {
+  id         Int       @id @default(autoincrement())
+  petId      Int
+  date       DateTime  @default(now())
+  weight     Float
+  Pet        Pet       @relation(fields: [petId], references: [id])
+}
+
+model PersonalityScale {
+  id          Int       @id @default(autoincrement())
+  activeness  Int
+  friendliness Int
+  shyness     Int
+  hunger      Int
+  pets        Pet[]
+}
+
+model Habitat {
+  id          Int       @id @default(autoincrement())
+  petId       Int
+  date        DateTime  @default(now())
+  boxSize     String
+  decoration  String
+  Pet         Pet       @relation(fields: [petId], references: [id])
+}
+
+model LocationTag {
+  id          Int       @id @default(autoincrement())
+  tag         String
+  petId       Int
+  Pet         Pet       @relation(fields: [petId], references: [id])
+}
+
+model Feeding {
+  id          Int       @id @default(autoincrement())
+  petId       Int
+  date        DateTime  @default(now())
+  feeder      String
+  feederSize  String
+  amount      Int
+  note        String?
+  Pet         Pet       @relation(fields: [petId], references: [id])
+}
+
+model Cleaning {
+  id          Int       @id @default(autoincrement())
+  petId       Int
+  date        DateTime  @default(now())
+  floorCleaning  Boolean
+  waterChange  Boolean
+  Pet         Pet       @relation(fields: [petId], references: [id])
+}
+
+model Shed {
+  id          Int       @id @default(autoincrement())
+  petId       Int
+  date        DateTime  @default(now())
+  percent     Int
+  note        String?
+  Pet         Pet       @relation(fields: [petId], references: [id])
+}
+
+model Illness {
+  id          Int       @id @default(autoincrement())
+  petId       Int
+  symptoms    String
+  date        DateTime  @default(now())
+  followUp    String
+  severeLevel SevereLevel
+  Pet         Pet       @relation(fields: [petId], references: [id])
+}
+
+enum SevereLevel {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+model Pairing {
+  id          Int       @id @default(autoincrement())
+  petId       Int
+  pairWith    String
+  pairingDate DateTime
+  bestCouple  Boolean
+  result      String
+  date        DateTime?
+  amount      Int?
+  note        String?
+  Pet         Pet       @relation(fields: [petId], references: [id])
+}
+
+model AttachedFile {
+  id          Int       @id @default(autoincrement())
+  petId       Int
+  url         String
+  Pet         Pet       @relation(fields: [petId], references: [id])
+}
