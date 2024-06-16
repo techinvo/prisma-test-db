@@ -111,7 +111,7 @@ export default function AddPet() {
                   className="w-full"
                   labelPlacement="outside"
                   maxValue={today(getLocalTimeZone())}
-                  onChange={(value) => handleDateChange(d.id, value.target.value)}
+                  onChange={(value) => handleDateChange(d.id, value)}
                 />
               ) : (
                 <Input
