@@ -18,21 +18,21 @@ model Pet {
   number                Int
   name                  String
   petType               PetType
-  morph                 Morph          @relation(fields: [morphId], references: [id])
+  // morph                 Morph          @relation(fields: [morphId], references: [id])
   morphId               Int
   gender                Gender
   dateOfBirth           DateTime
-  age                   Int            @default(0) // Age can be calculated dynamically
+  age                   String?           // @default(0) // Age can be calculated dynamically
   status                Status
   dateOfInactiveness    DateTime?
   cause                 String?
   note                  String?
-  arrivalData           ArrivalData    @relation(fields: [arrivalDataId], references: [id])
+  // arrivalData           ArrivalData    @relation(fields: [arrivalDataId], references: [id])
   arrivalDataId         Int
   weightRecords         WeightRecord[]
   habits                String?
   favoriteFood          String?
-  personalityScale      PersonalityScale @relation(fields: [personalityScaleId], references: [id])
+  // personalityScale      PersonalityScale @relation(fields: [personalityScaleId], references: [id])
   personalityScaleId    Int
   habitats              Habitat[]
   locationTags          LocationTag[]
@@ -50,13 +50,13 @@ enum PetType {
   TREE_FROGS
 }
 
-model Morph {
-  id            Int    @id @default(autoincrement())
-  color         String
-  dominantGene  String
-  subGene       String
-  pets          Pet[]
-}
+// model Morph {
+//   id            Int    @id @default(autoincrement())
+//   color         String
+//   dominantGene  String
+//   subGene       String
+//   pets          Pet[]
+// }
 
 enum Gender {
   MALE
@@ -71,15 +71,15 @@ enum Status {
   Watchout
 }
 
-model ArrivalData {
-  id          Int       @id @default(autoincrement())
-  petPrice    Float
-  shipping    Float
-  date        DateTime
-  from        String
-  weight      Float
-  pets        Pet[]
-}
+// model ArrivalData {
+//   id          Int       @id @default(autoincrement())
+//   petPrice    Float
+//   shipping    Float
+//   date        DateTime
+//   from        String
+//   weight      Float
+//   pets        Pet[]
+// }
 
 model WeightRecord {
   id         Int       @id @default(autoincrement())
@@ -89,14 +89,14 @@ model WeightRecord {
   Pet        Pet       @relation(fields: [petId], references: [id])
 }
 
-model PersonalityScale {
-  id          Int       @id @default(autoincrement())
-  activeness  Int
-  friendliness Int
-  shyness     Int
-  hunger      Int
-  pets        Pet[]
-}
+// model PersonalityScale {
+//   id          Int       @id @default(autoincrement())
+//   activeness  Int
+//   friendliness Int
+//   shyness     Int
+//   hunger      Int
+//   pets        Pet[]
+// }
 
 model Habitat {
   id          Int       @id @default(autoincrement())

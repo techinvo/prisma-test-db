@@ -2,7 +2,7 @@ const petTypes = ['SNAKE', 'LPG', 'TREE_FROGS'];
 const genders = ['UNKNOWN','MALE', 'FEMALE'];
 const statuses = ['Healthy','RIP','Sick','Watchout'];
 
-export const fildinput = [
+const fildinput = [
     {
         id:'number',
         label:'Number',
@@ -48,3 +48,9 @@ export const fildinput = [
         type:'text'
     },
 ]
+
+let parmas = {
+    listsPet:[]
+}
+
+export {fildinput,parmas}

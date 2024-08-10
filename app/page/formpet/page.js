@@ -1,16 +1,30 @@
 'use client'
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+
 import { Select, SelectItem } from "@nextui-org/select";
 import { Input } from "@nextui-org/input";
 import { DatePicker } from "@nextui-org/date-picker";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { useDisclosure } from "@nextui-org/modal";
+import axios from 'axios';
+
+import { calculateAge } from '@/app/model/lib';
 import MorphForm from '@/app/components/MorphForm';
 import ArrivalDataForm from '@/app/components/ArrivalDataForm';
 import { fildinput } from '@/app/model/model';
 import StatusModal from '@/app/components/StatusModal'; // Ensure the correct path and component name
 
 export default function AddPet() {
+  const searchParams = useSearchParams()
+  const router = useRouter();
+ 
+  const editFormValue= searchParams.get('editform') 
+  console.log(editFormValue)
+  if(editFormValue){
+
+  }
   const [formData, setFormData] = useState({});
   const { isOpen, onOpenChange } = useDisclosure();
   const [status, setStatus] = useState('');
@@ -21,27 +35,6 @@ export default function AddPet() {
       ...formData,
       [name]: value
     });
-  };
-
-  const calculateAge = (dob) => {
-    const birthDate = new Date(dob);
-    const today = new Date();
-
-    let years = today.getFullYear() - birthDate.getFullYear();
-    let months = today.getMonth() - birthDate.getMonth();
-    let days = today.getDate() - birthDate.getDate();
-
-    if (days < 0) {
-      months--;
-      days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
-    }
-
-    if (months < 0) {
-      years--;
-      months += 12;
-    }
-
-    return { years, months, days };
   };
 
   const handleDateChange = (name, value) => {
@@ -81,7 +74,10 @@ export default function AddPet() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Form Data:', formData);
+    router.push( `${process.env.NEXT_PUBLIC_API_URL}/page/arrivalPage?lists=${JSON.stringify(formData)}`
+    , { scroll: false });
   };
+
 
   return (
     <div className="max-w-4xl mx-auto p-4">

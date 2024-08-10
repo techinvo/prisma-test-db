@@ -16,7 +16,7 @@ export async function GET() {
 export async function POST(req, res) {
     const { tableName } = await req.json();
     try {
-        const data = await prisma.$queryRaw`SELECT * FROM ${tableName}`;
+        const data = await prisma.$queryRawUnsafe(`SELECT * FROM ${tableName}`);
         return NextResponse.json({data});
     } catch (error) {
         return NextResponse.json({ error });

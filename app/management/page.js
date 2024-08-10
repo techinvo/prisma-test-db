@@ -36,6 +36,7 @@ const Management = () => {
                     const data = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/management`, {
                         tableName: selectedTable
                     });
+                    console.log(data)
                     setTableData(data.data);
                 } catch (err) {
                     setError('Error fetching table data');
@@ -76,7 +77,7 @@ const Management = () => {
     }, [selectedTable]);
 
     return (
-        <div className="p-6 bg-gray-100 min-h-screen">
+        <div className="p-6 bg-gray-100 min-h-screen w-full">
             <h1 className="text-3xl font-bold mb-4 text-center">Database Tables</h1>
             <div className="mb-4">
                 <label htmlFor="tables" className="block text-lg font-semibold mb-2">Choose a table:</label>

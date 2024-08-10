@@ -50,7 +50,7 @@ const TableComponent = ({ data = [], height = '400px', headers = [], relationshi
     return displayData.map((row, index) => (
       <tr key={index} className="border-b">
         {Object.values(row).map((value, i) => (
-          <td key={i} className="p-2">{value}</td>
+          <td key={i} className="p-2 text-nowrap">{value}</td>
         ))}
       </tr>
     ));
@@ -80,7 +80,7 @@ const TableComponent = ({ data = [], height = '400px', headers = [], relationshi
   };
 
   return (
-    <div className="container">
+    <div className="container ">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-bold">Data for {nameTable}</h1>
         <input
