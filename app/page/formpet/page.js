@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 
@@ -16,18 +16,22 @@ import ArrivalDataForm from '@/app/components/ArrivalDataForm';
 import { fildinput } from '@/app/model/model';
 import StatusModal from '@/app/components/StatusModal'; // Ensure the correct path and component name
 
-export default function AddPet() {
+function AddPet() {
   const searchParams = useSearchParams()
   const router = useRouter();
- 
+
   const editFormValue= searchParams.get('editform') 
   console.log(editFormValue)
-  if(editFormValue){
-
-  }
+  
   const [formData, setFormData] = useState({});
   const { isOpen, onOpenChange } = useDisclosure();
   const [status, setStatus] = useState('');
+
+  useEffect(() => {
+    if(editFormValue){
+      setFormData(JSON.parse(editFormValue));
+    }
+  }, [editFormValue]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -94,7 +98,7 @@ export default function AddPet() {
                   placeholder={"Select " + d.label}
                   className="w-full"
                   value={d.id === 'status' ? status : formData[d.id] || ''}
-                  onChange={(value) => d.id === 'status' ? handleStatusChange(value.target.value) : handleChange({ target: { name: d.id, value:value.target.value } })}
+                  onChange={(value) => d.id === 'status' ? handleStatusChange(value) : handleChange({ target: { name: d.id, value } })}
                 >
                   {d.option.map((opt) => (
                     <SelectItem key={opt} value={opt}>{opt}</SelectItem>
@@ -135,5 +139,14 @@ export default function AddPet() {
         onConfirm={handleModalConfirm} 
       />
     </div>
+  );
+}
+
+// เพิ่มการใช้ Suspense ที่นี่
+export default function AddPetWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AddPet />
+    </Suspense>
   );
 }

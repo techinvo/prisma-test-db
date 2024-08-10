@@ -1,5 +1,6 @@
 'use client'
-import { useEffect, useState } from 'react';
+
+import { useEffect, useState, Suspense } from 'react'; // เพิ่มการ import Suspense
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,36 +23,33 @@ const ArrivalPage = () => {
     const list = searchParams.get('lists');
 
     useEffect(() => {
-        // This useEffect runs only on the client to load data from localStorage
         if (typeof window !== 'undefined') {
             const savedLists = localStorage.getItem('listsPet');
             if (savedLists) {
                 setListsPet(JSON.parse(savedLists));
             }
         }
-    }, []); // Empty dependency array ensures this runs only once on mount
+    }, []);
 
     useEffect(() => {
-        // This useEffect runs when the list query parameter changes
         if (list) {
             try {
                 const listConvert = JSON.parse(list);
                 const savedLists = localStorage.getItem('listsPet');
                 let updatedListsPet = JSON.parse(savedLists) || [];
 
-                // Check for duplicates
                 const isDuplicate = updatedListsPet.some(pet => pet.name === listConvert.name);
                 if (!isDuplicate) {
                     updatedListsPet = [...updatedListsPet, listConvert];
                     setListsPet(updatedListsPet);
-                    localStorage.setItem('listsPet', JSON.stringify(updatedListsPet)); // Save to localStorage
+                    localStorage.setItem('listsPet', JSON.stringify(updatedListsPet));
                 }
                 clearQuery();
             } catch (error) {
                 console.error('Error parsing list:', error);
             }
         }
-    }, [list]); // Only run this effect when 'list' changes
+    }, [list]);
 
     const clearQuery = () => {
         const params = new URLSearchParams(searchParams);
@@ -64,7 +62,6 @@ const ArrivalPage = () => {
     };
 
     const handleConfirm = async () => {
-        // handle confirmation logic
         if (listsPet.length > 0) {
             for (const list of listsPet) {
                 await addPet(list);
@@ -104,14 +101,16 @@ const ArrivalPage = () => {
                 </div>
             </div>
             <div name="body-arrival">
-                {Array.isArray(listsPet) && listsPet.length > 0 ? listsPet.map((list, index) => (
-                    <div key={index} className="bg-white p-4 rounded-lg shadow-md flex items-center justify-between">
-                        <span className="text-lg font-semibold">{list.name}</span>
-                        <Button color="warning" variant="light" onPress={() => router.push(`${process.env.NEXT_PUBLIC_API_URL}/page/formpet?editform=${JSON.stringify(list)}`, { scroll: false })}>
-                            <FontAwesomeIcon icon="pencil-alt" />
-                        </Button>
-                    </div>
-                )) : (
+                {Array.isArray(listsPet) && listsPet.length > 0 ? (
+                    listsPet.map((list, index) => (
+                        <div key={index} className="bg-white p-4 rounded-lg shadow-md flex items-center justify-between">
+                            <span className="text-lg font-semibold">{list.name}</span>
+                            <Button color="warning" variant="light" onPress={() => router.push(`${process.env.NEXT_PUBLIC_API_URL}/page/formpet?editform=${JSON.stringify(list)}`, { scroll: false })}>
+                                <FontAwesomeIcon icon="pencil-alt" />
+                            </Button>
+                        </div>
+                    ))
+                ) : (
                     <div className="text-center mt-4 text-gray-600">No pets found.</div>
                 )}
                 <div>
@@ -124,4 +123,11 @@ const ArrivalPage = () => {
     );
 };
 
-export default ArrivalPage;
+// เพิ่มส่วนนี้เพื่อใช้ Suspense
+const ArrivalPageWrapper = () => (
+    <Suspense fallback={<div>Loading...</div>}>
+        <ArrivalPage />
+    </Suspense>
+);
+
+export default ArrivalPageWrapper;
